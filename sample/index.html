@@ -7,15 +7,146 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&amp;display=swap" rel="stylesheet">
     <style>
       body {
-        max-width: 880px;
+        max-width: 1200px;
         margin: 0 auto;
-        padding: 32px 80px;
+        padding: 16px 24px;
         position: relative;
         box-sizing: border-box;
         font-family: 'Noto Sans JP', Arial, sans-serif;
         background: linear-gradient(135deg, #e3f2fd 0%, #f0f8ff 100%);
         color: #2c3e50;
-        line-height: 1.6;
+        line-height: 1.5;
+      }
+      
+      /* iPhone SE基準のレスポンシブ対応 */
+      @media (max-width: 768px) {
+        body {
+          padding: 8px 12px;
+          font-size: 13px;
+        }
+        .header {
+          padding: 12px;
+          margin-bottom: 12px;
+        }
+        .header h1 {
+          font-size: 1.6em;
+        }
+        .header .subtitle {
+          font-size: 0.9em;
+        }
+        .header-actions {
+          gap: 6px;
+          margin-top: 6px;
+        }
+        .toggle-button {
+          padding: 5px 8px;
+          font-size: 11px;
+        }
+        .topnav {
+          margin: 6px 0 4px 0;
+          padding: 3px 6px;
+          gap: 3px;
+        }
+        .topnav a {
+          padding: 3px 5px;
+          font-size: 10px;
+        }
+        .section {
+          margin: 8px 0;
+          padding: 10px;
+        }
+        .section h2 {
+          font-size: 1.1em;
+          margin-bottom: 8px;
+        }
+        .role-grid {
+          grid-template-columns: 1fr;
+          gap: 6px;
+        }
+        .role-card {
+          padding: 8px;
+        }
+        .schedule-day {
+          margin: 8px 0;
+          padding: 10px;
+        }
+        .schedule-day h3 {
+          font-size: 1.1em;
+          margin-bottom: 6px;
+        }
+        .checkbox-item {
+          margin: 3px 0;
+          padding: 3px;
+        }
+        .time {
+          min-width: 45px;
+          margin-right: 6px;
+          font-size: 12px;
+        }
+        .activity-text {
+          font-size: 12px;
+        }
+        .progress-section {
+          padding: 8px;
+        }
+        .progress-bar {
+          margin: 4px 0;
+        }
+        .progress-fill {
+          height: 12px;
+          font-size: 9px;
+        }
+        .warning, .items, .note, .members, .purpose {
+          padding: 8px;
+          margin: 8px 0;
+        }
+        ul {
+          padding-left: 12px;
+        }
+        li {
+          margin: 2px 0;
+        }
+        .to-top {
+          right: 12px;
+          bottom: 12px;
+          padding: 6px 8px;
+        }
+      }
+      
+      @media (max-width: 480px) {
+        body {
+          padding: 6px 10px;
+          font-size: 12px;
+        }
+        .header h1 {
+          font-size: 1.4em;
+        }
+        .header .subtitle {
+          font-size: 0.8em;
+        }
+        .section {
+          padding: 8px;
+        }
+        .checkbox-item {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .time {
+          margin-bottom: 2px;
+          margin-right: 0;
+          font-size: 11px;
+        }
+        .activity-text {
+          font-size: 11px;
+        }
+        .topnav a {
+          font-size: 9px;
+          padding: 2px 4px;
+        }
+        .toggle-button {
+          font-size: 10px;
+          padding: 4px 6px;
+        }
       }
       [data-theme='dark'] body {
         background: linear-gradient(135deg, #0f172a 0%, #111827 100%);
@@ -25,14 +156,14 @@
         text-align: center;
         background: linear-gradient(45deg, #4fc3f7, #26c6da);
         color: white;
-        padding: 30px;
+        padding: 20px;
         border-radius: 15px;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
       .header h1 {
         margin: 0;
-        font-size: 2.5em;
+        font-size: 2.3em;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
       }
       .header .subtitle {
@@ -43,8 +174,8 @@
       .header-actions {
         display: flex;
         justify-content: center;
-        gap: 12px;
-        margin-top: 14px;
+        gap: 10px;
+        margin-top: 10px;
       }
       .toggle-button {
         background: rgba(255, 255, 255, 0.2);
@@ -62,15 +193,15 @@
         position: sticky;
         top: 0;
         z-index: 50;
-        margin: 20px 0 10px 0;
+        margin: 10px 0 8px 0;
         background: rgba(255,255,255,0.8);
         border: 1px solid #e0f2f1;
         border-radius: 999px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        padding: 8px 12px;
+        padding: 6px 10px;
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 6px;
         justify-content: center;
         backdrop-filter: blur(6px);
       }
@@ -78,9 +209,9 @@
       .topnav a {
         text-decoration: none;
         color: #006064;
-        padding: 6px 10px;
+        padding: 6px 8px;
         border-radius: 999px;
-        font-size: 13px;
+        font-size: 12px;
         background: #e0f7fa;
       }
       .topnav a:hover { background: #b2ebf2; }
@@ -88,11 +219,11 @@
       [data-theme='dark'] .topnav a:hover { background: #115e59; }
       .section {
         background: white;
-        margin: 20px 0;
-        padding: 25px;
+        margin: 12px 0;
+        padding: 18px;
         border-radius: 12px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        border-left: 5px solid #26c6da;
+        border-left: 4px solid #26c6da;
       }
       [data-theme='dark'] .section {
         background: #0b1220;
@@ -102,9 +233,9 @@
       .section h2 {
         color: #00838f;
         border-bottom: 2px solid #b2ebf2;
-        padding-bottom: 8px;
-        margin-bottom: 20px;
-        font-size: 1.4em;
+        padding-bottom: 6px;
+        margin-bottom: 12px;
+        font-size: 1.35em;
       }
       .members {
         background: #f1f8e9;
@@ -122,13 +253,13 @@
       }
       .role-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 15px;
-        margin: 15px 0;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 10px;
+        margin: 12px 0;
       }
       .role-card {
         background: #f8f9fa;
-        padding: 15px;
+        padding: 12px;
         border-radius: 8px;
         border-left: 4px solid #42a5f5;
       }
@@ -140,22 +271,22 @@
       }
       .schedule-day {
         background: #e8f5e8;
-        margin: 20px 0;
-        padding: 20px;
+        margin: 12px 0;
+        padding: 16px;
         border-radius: 10px;
-        border-left: 5px solid #4caf50;
+        border-left: 4px solid #4caf50;
       }
       [data-theme='dark'] .schedule-day { background: #0b2b17; border-left-color: #22c55e; }
       .schedule-day h3 {
         color: #2e7d32;
-        margin-bottom: 15px;
-        font-size: 1.3em;
+        margin-bottom: 10px;
+        font-size: 1.25em;
       }
       .checkbox-item {
         display: flex;
         align-items: flex-start;
-        margin: 8px 0;
-        padding: 8px;
+        margin: 6px 0;
+        padding: 6px;
         background: white;
         border-radius: 6px;
         border-left: 3px solid #81c784;
@@ -180,8 +311,8 @@
       .time {
         font-weight: 600;
         color: #2e7d32;
-        min-width: 60px;
-        margin-right: 15px;
+        min-width: 56px;
+        margin-right: 12px;
       }
       .activity {
         flex: 1;
@@ -191,44 +322,44 @@
       }
       .warning {
         background: #ffebee;
-        padding: 15px;
+        padding: 12px;
         border-radius: 8px;
         border-left: 4px solid #ef5350;
-        margin: 15px 0;
+        margin: 12px 0;
       }
       .items {
         background: #f3e5f5;
-        padding: 15px;
+        padding: 12px;
         border-radius: 8px;
         border-left: 4px solid #ab47bc;
-        margin: 15px 0;
+        margin: 12px 0;
       }
       .note {
         background: #e1f5fe;
-        padding: 15px;
+        padding: 12px;
         border-radius: 8px;
         border-left: 4px solid #29b6f6;
-        margin: 15px 0;
+        margin: 12px 0;
         text-align: center;
         font-weight: 600;
       }
       .progress-section {
         background: #e8f5e8;
-        padding: 15px;
+        padding: 12px;
         border-radius: 8px;
         border-left: 4px solid #4caf50;
-        margin: 15px 0;
+        margin: 12px 0;
         text-align: center;
       }
       .progress-bar {
         background: #ddd;
         border-radius: 10px;
-        padding: 3px;
-        margin: 10px 0;
+        padding: 2px;
+        margin: 8px 0;
       }
       .progress-fill {
         background: linear-gradient(45deg, #4caf50, #66bb6a);
-        height: 20px;
+        height: 16px;
         border-radius: 7px;
         transition: width 0.5s ease;
         display: flex;
@@ -236,13 +367,13 @@
         justify-content: center;
         color: white;
         font-weight: bold;
-        font-size: 12px;
+        font-size: 11px;
       }
       ul {
-        padding-left: 20px;
+        padding-left: 16px;
       }
       li {
-        margin: 5px 0;
+        margin: 4px 0;
       }
       .contact {
         font-style: italic;
