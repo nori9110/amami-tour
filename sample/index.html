@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light" style=""><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奄美大島満喫ツアー - 旅の栞（進捗チェック版）</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+      body {
+        max-width: 880px;
+        margin: 0 auto;
+        padding: 32px 80px;
+        position: relative;
+        box-sizing: border-box;
+        font-family: 'Noto Sans JP', Arial, sans-serif;
+        background: linear-gradient(135deg, #e3f2fd 0%, #f0f8ff 100%);
+        color: #2c3e50;
+        line-height: 1.6;
+      }
+      [data-theme='dark'] body {
+        background: linear-gradient(135deg, #0f172a 0%, #111827 100%);
+        color: #e5e7eb;
+      }
+      .header {
+        text-align: center;
+        background: linear-gradient(45deg, #4fc3f7, #26c6da);
+        color: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 2.5em;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+      .header .subtitle {
+        font-size: 1.2em;
+        margin-top: 10px;
+        opacity: 0.9;
+      }
+      .header-actions {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 14px;
+      }
+      .toggle-button {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 1px solid rgba(255,255,255,0.6);
+        padding: 8px 14px;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 14px;
+        backdrop-filter: blur(2px);
+      }
+      .toggle-button:hover { opacity: 0.9; }
+
+      .topnav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        margin: 20px 0 10px 0;
+        background: rgba(255,255,255,0.8);
+        border: 1px solid #e0f2f1;
+        border-radius: 999px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        padding: 8px 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+        backdrop-filter: blur(6px);
+      }
+      [data-theme='dark'] .topnav { background: rgba(17,24,39,0.7); border-color: #334155; }
+      .topnav a {
+        text-decoration: none;
+        color: #006064;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 13px;
+        background: #e0f7fa;
+      }
+      .topnav a:hover { background: #b2ebf2; }
+      [data-theme='dark'] .topnav a { color: #e0f2f1; background: #0f766e; }
+      [data-theme='dark'] .topnav a:hover { background: #115e59; }
+      .section {
+        background: white;
+        margin: 20px 0;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        border-left: 5px solid #26c6da;
+      }
+      [data-theme='dark'] .section {
+        background: #0b1220;
+        border-left-color: #0ea5e9;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+      }
+      .section h2 {
+        color: #00838f;
+        border-bottom: 2px solid #b2ebf2;
+        padding-bottom: 8px;
+        margin-bottom: 20px;
+        font-size: 1.4em;
+      }
+      .members {
+        background: #f1f8e9;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #66bb6a;
+        margin: 15px 0;
+      }
+      .purpose {
+        background: #fff3e0;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #ffa726;
+        margin: 15px 0;
+      }
+      .role-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 15px;
+        margin: 15px 0;
+      }
+      .role-card {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #42a5f5;
+      }
+      [data-theme='dark'] .role-card { background: #111827; border-left-color: #60a5fa; }
+      .role-card .role-title {
+        font-weight: 600;
+        color: #1565c0;
+        margin-bottom: 8px;
+      }
+      .schedule-day {
+        background: #e8f5e8;
+        margin: 20px 0;
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 5px solid #4caf50;
+      }
+      [data-theme='dark'] .schedule-day { background: #0b2b17; border-left-color: #22c55e; }
+      .schedule-day h3 {
+        color: #2e7d32;
+        margin-bottom: 15px;
+        font-size: 1.3em;
+      }
+      .checkbox-item {
+        display: flex;
+        align-items: flex-start;
+        margin: 8px 0;
+        padding: 8px;
+        background: white;
+        border-radius: 6px;
+        border-left: 3px solid #81c784;
+        transition: all 0.3s ease;
+      }
+      .checkbox-item.completed {
+        background: #f5f5f5;
+        opacity: 0.7;
+      }
+      [data-theme='dark'] .checkbox-item { background: #0f172a; }
+      [data-theme='dark'] .checkbox-item.completed { background: #1f2937; }
+      .checkbox-item.completed .activity-text {
+        text-decoration: line-through;
+        color: #666;
+      }
+      .checkbox-item input[type='checkbox'] {
+        margin-right: 12px;
+        margin-top: 2px;
+        transform: scale(1.2);
+        cursor: pointer;
+      }
+      .time {
+        font-weight: 600;
+        color: #2e7d32;
+        min-width: 60px;
+        margin-right: 15px;
+      }
+      .activity {
+        flex: 1;
+      }
+      .activity-text {
+        transition: all 0.3s ease;
+      }
+      .warning {
+        background: #ffebee;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #ef5350;
+        margin: 15px 0;
+      }
+      .items {
+        background: #f3e5f5;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #ab47bc;
+        margin: 15px 0;
+      }
+      .note {
+        background: #e1f5fe;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #29b6f6;
+        margin: 15px 0;
+        text-align: center;
+        font-weight: 600;
+      }
+      .progress-section {
+        background: #e8f5e8;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #4caf50;
+        margin: 15px 0;
+        text-align: center;
+      }
+      .progress-bar {
+        background: #ddd;
+        border-radius: 10px;
+        padding: 3px;
+        margin: 10px 0;
+      }
+      .progress-fill {
+        background: linear-gradient(45deg, #4caf50, #66bb6a);
+        height: 20px;
+        border-radius: 7px;
+        transition: width 0.5s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 12px;
+      }
+      ul {
+        padding-left: 20px;
+      }
+      li {
+        margin: 5px 0;
+      }
+      .contact {
+        font-style: italic;
+        color: #666;
+        font-size: 0.9em;
+      }
+      .turtle-emoji {
+        font-size: 1.2em;
+      }
+      .reset-button {
+        background: #ff5722;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        margin-left: 10px;
+      }
+      .reset-button:hover {
+        background: #e64a19;
+      }
+      .to-top {
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        background: #26c6da;
+        color: #fff;
+        border: none;
+        padding: 10px 14px;
+        border-radius: 999px;
+        cursor: pointer;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        display: none;
+      }
+      .to-top.show { display: inline-block; }
+    </style>
+  </head>
+  <body style="">
+    <div class="header">
+      <h1>🏝️ 奄美大島満喫ツアー 🐢</h1>
+      <div class="subtitle">～ 旅 の 栞（進捗チェック版）～ 楽しくチェックして思い出倍増！✨</div>
+      <div style="margin-top: 15px; font-size: 1.1em">ツアーコンダクター：小野敦郎</div>
+      <div class="header-actions">
+        <button class="toggle-button" id="theme-toggle">🌗 テーマ切替</button>
+        <button class="toggle-button" id="print-btn">🖨️ 印刷</button>
+      </div>
+    </div>
+
+    <nav class="topnav">
+      <a href="#progress">📊 進捗</a>
+      <a href="#members">👥 メンバー</a>
+      <a href="#purpose">🎯 目的</a>
+      <a href="#attention">⚠️ 注意</a>
+      <a href="#roles">👨‍💼 係分担</a>
+      <a href="#schedule">📅 日程</a>
+      <a href="#items">🎒 持ち物</a>
+      <a href="#after">🍝 反省会</a>
+    </nav>
+
+    <div class="section" id="progress">
+      <h2>📊 進捗状況</h2>
+      <div class="progress-section">
+        <p><strong>全体進捗：</strong><span id="progress-text">0/27 完了 (0%)</span></p>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width: 0%">0%</div>
+        </div>
+        <button class="reset-button" onclick="resetAllProgress()">全てリセット</button>
+      </div>
+    </div>
+
+    <div class="section" id="members">
+      <h2>👥 参加メンバー</h2>
+      <div class="members">
+        <strong>岡部夫婦・伊藤夫婦・今井夫婦・小野夫婦</strong><br>
+        <span style="font-size: 1.2em; color: #2e7d32"><strong>計8名</strong></span>
+      </div>
+    </div>
+
+    <div class="section" id="purpose">
+      <h2>🎯 今回の旅の目的</h2>
+      <div class="purpose">
+        <ul>
+          <li>奄美大島の自然を存分に満喫する</li>
+          <li>今回は全員海中の自然を楽しむのでウミガメに出会えることを祈る <span class="turtle-emoji">🐢</span></li>
+          <li><strong>このメンバーであと何回行けるかわからない旅行をかみしめる</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section" id="attention">
+      <h2>⚠️ 注意事項</h2>
+      <div class="warning">
+        <ul>
+          <li>各自健康には十分注意し、任意ではありますが帯状疱疹・インフルエンザの予防注射は打っておく</li>
+          <li>大島のように不測の事態も想定し下着は余分に持っていく</li>
+          <li><strong>このしおりには本音とジョークが混ざっているのでしっかり判断する</strong></li>
+          <li><strong>絶対に喧嘩をしない</strong></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section" id="roles">
+      <h2>👨‍💼 係分担</h2>
+      <p><strong>各係の言うことは必ずきく。不満があるときは班長に訴える</strong></p>
+
+      <div class="role-grid">
+        <div class="role-card">
+          <div class="role-title">班長：小野父</div>
+          <small>（班長は持ち回りです）</small><br>
+          全体をまとめ、楽しい旅行となるよう配慮する。しっかり責任は取る。<br>
+          <em>班長が道やルートを間違えたらコッソリ文句を言う</em>
+        </div>
+
+        <div class="role-card">
+          <div class="role-title">風紀係：伊藤父</div>
+          最も重要な係、全体が羽目を外さないよう又途中で寝ないよう見張る。<br>
+          <strong>助手席は絶対に寝ないように指導</strong>
+        </div>
+
+        <div class="role-card">
+          <div class="role-title">宴会係：岡部父</div>
+          主に宴会時の飲み物つまみを確保。自分は飲まないからと言って手を抜かない。<br>
+          <strong>当然2日間やる気合いを見せる</strong>
+        </div>
+
+        <div class="role-card">
+          <div class="role-title">YouTube係：小野母</div>
+          事前にYouTubeをよく見ておき有益な情報をGetする
+        </div>
+
+        <div class="role-card">
+          <div class="role-title">会計係：岡部母</div>
+          毎回費用を記録し、公正に努める。<br>
+          <em>間違っても岡部家に有利にしてはいけない。</em><br>
+          勿論PayPayが自在に使えるよう
+        </div>
+
+        <div class="role-card">
+          <div class="role-title">食事係：今井母</div>
+          各食事の時間、場所の確認。遅れたり間違えた参加者には厳しく指導。<br>
+          <strong>勿論残さず食べさせる</strong>
+        </div>
+
+        <div class="role-card">
+          <div class="role-title">お助け係：伊藤母</div>
+          いわゆる各係の仕事を監視し、大変な所をサポートする
+        </div>
+
+        <div class="role-card">
+          <div class="role-title">副班長：今井父</div>
+          固定になってしまいますがよろしくお願いいたします
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="schedule">
+      <h2>📅 詳細日程（チェックリスト）</h2>
+
+      <div class="schedule-day">
+        <h3>11月3日（月曜日）</h3>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-1" onchange="updateProgress()">
+          <div class="time">6:30</div>
+          <div class="activity">
+            <div class="activity-text">
+              羽田第1ターミナル第3時計台に集合<br><small>朝食は各自用意をしておく、帰りのチケットを配布</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-2" onchange="updateProgress()">
+          <div class="time">7:30</div>
+          <div class="activity">
+            <div class="activity-text">離陸</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-3" onchange="updateProgress()">
+          <div class="time">8:40</div>
+          <div class="activity">
+            <div class="activity-text">大阪伊丹空港着</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-4" onchange="updateProgress()">
+          <div class="time">9:55</div>
+          <div class="activity">
+            <div class="activity-text">大阪伊丹空港発</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-5" onchange="updateProgress()">
+          <div class="time">11:55</div>
+          <div class="activity">
+            <div class="activity-text">奄美大島空港</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-6" onchange="updateProgress()">
+          <div class="time">12:30</div>
+          <div class="activity">
+            <div class="activity-text">レンタカー乗車<br><small>10人乗りなのでゆったりです</small></div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-7" onchange="updateProgress()">
+          <div class="time">13:00</div>
+          <div class="activity">
+            <div class="activity-text">昼食 海工房（海を見ながら）</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-8" onchange="updateProgress()">
+          <div class="time">13:30</div>
+          <div class="activity">
+            <div class="activity-text">シュノーケリング ネイティブシティ奄美</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-9" onchange="updateProgress()">
+          <div class="time">15:30</div>
+          <div class="activity">
+            <div class="activity-text">終了 ハートロックへ</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-10" onchange="updateProgress()">
+          <div class="time">17:30</div>
+          <div class="activity">
+            <div class="activity-text">オンシェアー サンセットクルーズ</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-11" onchange="updateProgress()">
+          <div class="time">19:00</div>
+          <div class="activity">
+            <div class="activity-text">終了 ホテルカレッタへ</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-12" onchange="updateProgress()">
+          <div class="time">19:30</div>
+          <div class="activity">
+            <div class="activity-text">
+              チェックイン<br><small class="contact">0997-62-3821 鹿児島県大島郡龍郷町芦徳419-1</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-13" onchange="updateProgress()">
+          <div class="time">18:00</div>
+          <div class="activity">
+            <div class="activity-text">外食 近くの鳥料理店？</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="schedule-day">
+        <h3>11月4日（火曜日）</h3>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-14" onchange="updateProgress()">
+          <div class="time">7:30</div>
+          <div class="activity">
+            <div class="activity-text">朝食<br><small>そのまま出発出来るように準備</small></div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-15" onchange="updateProgress()">
+          <div class="time">8:00</div>
+          <div class="activity">
+            <div class="activity-text">ホテル出発<br>観光 名瀬方面ドライブ</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-16" onchange="updateProgress()">
+          <div class="time">9:30</div>
+          <div class="activity">
+            <div class="activity-text">金作原原生林ツアー 2時間</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-17" onchange="updateProgress()">
+          <div class="time">12:00</div>
+          <div class="activity">
+            <div class="activity-text">鶏飯 ひさ倉</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-18" onchange="updateProgress()">
+          <div class="time">13:15</div>
+          <div class="activity">
+            <div class="activity-text">大浜海浜公園か奄美博物館</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-19" onchange="updateProgress()">
+          <div class="time">15:00</div>
+          <div class="activity">
+            <div class="activity-text">
+              ホテルウエストコート本館チェックイン<br><small class="contact">0977-52-8080</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-20" onchange="updateProgress()">
+          <div class="time">15:20</div>
+          <div class="activity">
+            <div class="activity-text">マングローブパークへ</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-21" onchange="updateProgress()">
+          <div class="time">16:00</div>
+          <div class="activity">
+            <div class="activity-text">サンセットマングローブツアーと黒兎探検ツアー</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-22" onchange="updateProgress()">
+          <div class="time">19:30</div>
+          <div class="activity">
+            <div class="activity-text">終了</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-23" onchange="updateProgress()">
+          <div class="time">20:00</div>
+          <div class="activity">
+            <div class="activity-text">夕食 どこか予約するか居酒屋みたいなところに飛び込みか</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="schedule-day">
+        <h3>11月5日（水曜日）</h3>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-24" onchange="updateProgress()">
+          <div class="time">8:00</div>
+          <div class="activity">
+            <div class="activity-text">
+              朝食<br><small>そのまま出発出来るように準備（疲れているのでちょっと遅く）</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-25" onchange="updateProgress()">
+          <div class="time">8:30</div>
+          <div class="activity">
+            <div class="activity-text">ホテル出発<br>観光 現地車中で相談 土森海岸観光やお土産等</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-26" onchange="updateProgress()">
+          <div class="time">12:00</div>
+          <div class="activity">
+            <div class="activity-text">昼食 きよら海工房または奄美ブルー</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-27" onchange="updateProgress()">
+          <div class="time">13:10</div>
+          <div class="activity">
+            <div class="activity-text">奄美大島空港へ</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-28" onchange="updateProgress()">
+          <div class="time">13:20</div>
+          <div class="activity">
+            <div class="activity-text">レンタカー返却</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-29" onchange="updateProgress()">
+          <div class="time">14:30</div>
+          <div class="activity">
+            <div class="activity-text">羽田空港へ離陸</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-30" onchange="updateProgress()">
+          <div class="time">16:25</div>
+          <div class="activity">
+            <div class="activity-text"><strong>羽田空港着 お疲れさまでした</strong></div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-31" onchange="updateProgress()">
+          <div class="time">18:30</div>
+          <div class="activity">
+            <div class="activity-text">池袋駅発 ラビュー</div>
+          </div>
+        </div>
+
+        <div class="checkbox-item">
+          <input type="checkbox" id="item-32" onchange="updateProgress()">
+          <div class="time">19:05</div>
+          <div class="activity">
+            <div class="activity-text">入間市駅着</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="items">
+      <h2>🎒 持ち物</h2>
+      <div class="items">
+        <ul>
+          <li><strong>お小遣い（2万円）</strong></li>
+          <li>2泊なので着替え（不測の事態に備えて多めで）</li>
+          <li>不要物は持ってこないように</li>
+          <li>今回、帰りは電車なので大丈夫とは思いますが柔軟に対応できるご準備を</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note" id="after">🍝 12/13（仮）【反省会】18時 新狭山 レストラン ルコッソ イタリアン 🍝</div>
+
+    <div style="
+        text-align: center;
+        margin-top: 30px;
+        padding: 20px;
+        background: linear-gradient(45deg, #81c784, #66bb6a);
+        color: white;
+        border-radius: 10px;
+      ">
+      <h3 style="margin: 0; color: white">🌺 素敵な旅になりますように 🌺</h3>
+      <p style="margin: 10px 0 0 0; font-size: 1.1em">みんなでたくさんの思い出を作りましょう！</p>
+    </div>
+
+    <button class="to-top" id="to-top">⬆️ トップへ</button>
+
+    <script>
+      const TOTAL_ITEMS = 32;
+
+      // ページ読み込み時に保存された状態を復元
+      window.addEventListener('load', function () {
+        restoreProgress();
+        updateProgress();
+        restoreTheme();
+        setupInteractions();
+      });
+
+      function updateProgress() {
+        let completedCount = 0;
+
+        for (let i = 1; i <= TOTAL_ITEMS; i++) {
+          const checkbox = document.getElementById(`item-${i}`);
+          const item = checkbox.closest('.checkbox-item');
+
+          if (checkbox.checked) {
+            completedCount++;
+            item.classList.add('completed');
+            // localStorage に状態を保存
+            localStorage.setItem(`item-${i}`, 'true');
+          } else {
+            item.classList.remove('completed');
+            localStorage.removeItem(`item-${i}`);
+          }
+        }
+
+        const percentage = Math.round((completedCount / TOTAL_ITEMS) * 100);
+
+        // 進捗表示を更新
+        document.getElementById('progress-text').textContent = `${completedCount}/${TOTAL_ITEMS} 完了 (${percentage}%)`;
+        document.getElementById('progress-fill').style.width = `${percentage}%`;
+        document.getElementById('progress-fill').textContent = `${percentage}%`;
+
+        if (percentage === 100 && !localStorage.getItem('tour-complete')) {
+          alert('🎉 全工程達成！おめでとうございます！良い旅の思い出を！');
+          localStorage.setItem('tour-complete', 'true');
+        }
+      }
+
+      function restoreProgress() {
+        for (let i = 1; i <= TOTAL_ITEMS; i++) {
+          const checkbox = document.getElementById(`item-${i}`);
+          const saved = localStorage.getItem(`item-${i}`);
+          if (saved === 'true') {
+            checkbox.checked = true;
+          }
+        }
+      }
+
+      function resetAllProgress() {
+        if (confirm('全ての進捗をリセットしますか？')) {
+          for (let i = 1; i <= TOTAL_ITEMS; i++) {
+            const checkbox = document.getElementById(`item-${i}`);
+            checkbox.checked = false;
+            localStorage.removeItem(`item-${i}`);
+          }
+          localStorage.removeItem('tour-complete');
+          updateProgress();
+        }
+      }
+
+      // テーマ切替と補助機能
+      function restoreTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }
+
+      function toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme') || 'light';
+        const next = current === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+      }
+
+      function setupInteractions() {
+        const themeBtn = document.getElementById('theme-toggle');
+        const printBtn = document.getElementById('print-btn');
+        const toTop = document.getElementById('to-top');
+        if (themeBtn) themeBtn.addEventListener('click', toggleTheme);
+        if (printBtn) printBtn.addEventListener('click', () => window.print());
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 300) {
+            toTop.classList.add('show');
+          } else {
+            toTop.classList.remove('show');
+          }
+        });
+        toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+      }
+    </script>
+  
+
+  </body></html>
+
+
