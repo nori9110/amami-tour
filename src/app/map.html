@@ -63,10 +63,24 @@
   <script src="assets/js/data.js"></script>
   <script src="assets/js/map.js"></script>
   
-  <!-- Google Maps API -->
-  <!-- TODO: フェーズ4で環境変数に置き換え -->
-  <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap&libraries=places">
+  <!-- Google Maps API（APIキーをServerless APIから取得して動的に読み込む） -->
+  <script>
+    (function loadMapsApi() {
+      fetch('/api/maps-key')
+        .then(res => res.json())
+        .then(({ key }) => {
+          if (!key) throw new Error('API key missing');
+          const s = document.createElement('script');
+          s.async = true;
+          s.defer = true;
+          s.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&callback=initMap&libraries=places&loading=async`;
+          document.body.appendChild(s);
+        })
+        .catch(err => {
+          console.error('Failed to load Google Maps API:', err);
+          alert('Google Mapsの読み込みに失敗しました。環境変数設定とリファラー制限をご確認ください。');
+        });
+    })();
   </script>
   <script>
     // URLパラメータから地点情報を取得して地図上に表示

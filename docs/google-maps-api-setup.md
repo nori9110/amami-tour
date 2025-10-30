@@ -304,3 +304,41 @@ APIキーの設定が完了したら、以下を実施してください：
 **作成日**: 2024年XX月XX日  
 **更新日**: 2024年XX月XX日
 
+## 7.3 本番（Vercel）でのキー読込方式（本リポジトリ実装）
+
+- `api/maps-key.js` が `process.env.GOOGLE_MAPS_API_KEY` を返却します（JSON: `{ key }`）。
+- クライアント側（`src/app/map.html`）は `/api/maps-key` をfetchし、取得したキーでGoogle Maps JavaScript APIを動的に読み込みます。
+- セキュリティ上、APIキーはクライアントに公開されます。必ずHTTPリファラー制限とAPI制限を有効化してください（vercel.app と本番ドメイン）。
+
+```html
+<script>
+(function loadMapsApi(){
+  fetch('/api/maps-key')
+    .then(r=>r.json())
+    .then(({key})=>{
+      const s=document.createElement('script');
+      s.async=true; s.defer=true;
+      s.src=`https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&callback=initMap&libraries=places&loading=async`;
+      document.body.appendChild(s);
+    })
+    .catch(err=>{
+      console.error('Failed to load Google Maps API:', err);
+      alert('Google Mapsの読み込みに失敗しました。環境変数設定とリファラー制限をご確認ください。');
+    });
+})();
+</script>
+```
+
+### Vercel 環境変数の設定
+- Vercel Dashboard → Project → Settings → Environment Variables
+  - Name: `GOOGLE_MAPS_API_KEY`
+  - Value: 取得したキー
+  - Environments: Production / Preview / Development
+
+### ルーティング（vercel.json）
+- ルート `/` → `src/app/index.html`
+- `/schedule` → `src/app/schedule.html`
+- `/map` → `src/app/map.html`
+
+これらは本リポジトリの `vercel.json` に設定済みです。
+

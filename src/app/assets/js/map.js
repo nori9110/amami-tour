@@ -102,6 +102,13 @@ function createInfoWindowContent(item) {
     content += `<a href="${item.website}" target="_blank" rel="noopener noreferrer">`;
     content += `🔗 ウェブサイト <span class="external-link-icon">↗</span></a>`;
     content += `</div>`;
+  } else {
+    const query = encodeURIComponent((item.location && item.location.name) ? item.location.name : item.activity);
+    const searchUrl = `https://www.google.com/search?q=${query}`;
+    content += `<div style="margin-top: 4px;">`;
+    content += `<a href="${searchUrl}" target="_blank" rel="noopener noreferrer">`;
+    content += `🔎 検索 <span class="external-link-icon">↗</span></a>`;
+    content += `</div>`;
   }
   
   content += `</div>`;
@@ -118,6 +125,9 @@ function initRouteSearch() {
 
   // ドロップダウンに日程項目を追加
   if (fromSelect && toSelect) {
+    // 現在地オプションを追加
+    fromSelect.add(new Option('現在地（端末の位置）', '__CURRENT__'));
+
     scheduleData.schedule.forEach(day => {
       day.items.forEach(item => {
         if (item.location && item.location.name) {
@@ -140,11 +150,31 @@ function initRouteSearch() {
         return;
       }
 
-      const fromItem = findItemById(fromId);
       const toItem = findItemById(toId);
 
-      if (fromItem && toItem && fromItem.location && toItem.location) {
+      // Toのバリデーション
+      if (!toItem || !toItem.location) {
+        alert('到着地点が不正です。');
+        return;
+      }
+
+      // Fromが現在地の場合
+      if (fromId === '__CURRENT__') {
+        getUserLocation().then(currentLoc => {
+          calculateAndDisplayRoute(currentLoc, toItem.location);
+        }).catch(err => {
+          alert('現在地を取得できませんでした。ブラウザの位置情報設定を確認してください。');
+          console.error('Geolocation error:', err);
+        });
+        return;
+      }
+
+      // 通常のFrom（スケジュール項目）
+      const fromItem = findItemById(fromId);
+      if (fromItem && fromItem.location) {
         calculateAndDisplayRoute(fromItem.location, toItem.location);
+      } else {
+        alert('出発地点が不正です。');
       }
     });
   }
@@ -165,7 +195,15 @@ function initRouteSearch() {
   // From/To選択時の地図移動
   if (fromSelect) {
     fromSelect.addEventListener('change', () => {
-      const item = findItemById(fromSelect.value);
+      const val = fromSelect.value;
+      if (val === '__CURRENT__') {
+        getUserLocation().then(loc => {
+          map.setCenter({ lat: loc.lat, lng: loc.lng });
+          map.setZoom(15);
+        }).catch(() => {});
+        return;
+      }
+      const item = findItemById(val);
       if (item && item.location) {
         map.setCenter({ lat: item.location.lat, lng: item.location.lng });
         map.setZoom(15);
@@ -226,6 +264,26 @@ function calculateAndDisplayRoute(fromLocation, toLocation) {
       }
     }
   );
+}
+
+// 現在地をPromiseで取得
+function getUserLocation() {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject(new Error('Geolocation not supported'));
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        resolve({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        });
+      },
+      error => reject(error),
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  });
 }
 
 // 経路情報を表示
