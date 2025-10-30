@@ -643,56 +643,53 @@ li {
   margin-bottom: 10px;
 }
 
+/* --- 交通手段ラジオ: 横一列レイアウト強制・各ラベルはnowrap&水平方向 --- */
 .transport-mode {
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
   gap: 24px;
   margin: 18px 0 12px 0;
-}
-
-.transport-mode label {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 1em;
-  gap: 2px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.transport-mode input[type="radio"] {
-  margin-bottom: 4px;
-  accent-color: #26c6da;
-  transform: scale(1.15);
+  flex-wrap: nowrap;
 }
 
 .transport-label {
   display: inline-flex;
+  flex-direction: row;
   align-items: center;
+  gap: 6px;
   font-size: 1em;
-  gap: 7px;
-  cursor: pointer;
   font-weight: 600;
-  margin-right: 8px;
+  white-space: nowrap;
+  line-height: 1.1;
 }
+
 .transport-icon {
-  font-size: 1.28em;
-  margin-left: 2px;
-  margin-right: 2px;
+  font-size: 1.26em;
+  margin: 0 2px 0 0;
   line-height: 1;
-  display: inline-block;
 }
+
 .transport-text {
   font-size: 1em;
-  letter-spacing: 0.04em;
-  line-height: 1.1;
-  display: inline-block;
+  letter-spacing: 0.01em;
 }
+
+/* 強制一行: 公共交通機関のtextも短縮案 */
+/* もし名称短縮許容ならこれも対応可能です
+.transport-label[value="TRANSIT"] .transport-text {
+  font-size: 0.97em;
+  letter-spacing: -0.01em;
+}
+*/
 
 /* スマホ向けにも行間が詰まらないように調整 */
 @media (max-width: 600px) {
-  .transport-label { gap: 4px; margin-right: 3px; font-size: 0.98em; }
-  .transport-icon { font-size: 1.05em; }
+  .transport-mode { gap: 10px; }
+  .transport-label { font-size: 0.94em; gap: 3px; }
+  .transport-icon { font-size: 1em; }
+  .transport-text { font-size: 0.98em; }
 }
 
 /* ボタン類を中央揃え・間隔拡大 */
