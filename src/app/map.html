@@ -43,9 +43,22 @@
       </select>
       
       <div class="transport-mode">
-        <label><input type="radio" name="transport-mode" value="DRIVING" checked> 🚗 車</label>
-        <label><input type="radio" name="transport-mode" value="WALKING"> 🚶 徒歩</label>
-        <label><input type="radio" name="transport-mode" value="TRANSIT"> 🚌 公共交通機関</label>
+        <label class="transport-label">
+          <input type="radio" name="transport-mode" value="DRIVING" checked>
+          <span class="transport-icon">🚗</span>
+          <span class="transport-text">車</span>
+        </label>
+        <label class="transport-label">
+          <input type="radio" name="transport-mode" value="WALKING">
+          <span class="transport-icon">🚶</span>
+          <span class="transport-text">徒歩</span>
+        </label>
+        <label class="transport-label">
+          <input type="radio" name="transport-mode" value="TRANSIT">
+          <span class="transport-icon">🚌</span>
+          <span class="transport-text">公共
+交通機関</span>
+        </label>
       </div>
       
       <button id="route-search">経路検索</button>
