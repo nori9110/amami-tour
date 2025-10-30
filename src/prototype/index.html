@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>奄美大島満喫ツアー - トップ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- ヘッダー -->
+  <div class="header">
+    <h1>🏝️ 奄美大島満喫ツアー 🐢</h1>
+    <div class="subtitle">～ 旅の栞（進捗チェック版）～ 楽しくチェックして思い出倍増！✨</div>
+    <div style="margin-top: 15px; font-size: 1.1em">ツアーコンダクター：小野敦郎</div>
+    <div class="header-actions">
+      <button class="toggle-button" id="theme-toggle" onclick="toggleTheme()">🌗 テーマ切替</button>
+      <button class="toggle-button" id="print-btn">🖨️ 印刷</button>
+    </div>
+  </div>
+
+  <!-- ナビゲーションメニュー -->
+  <nav class="topnav">
+    <a href="index.html">🏠 トップ</a>
+    <a href="schedule.html">📅 詳細日程</a>
+    <a href="map.html">🗺️ 地図</a>
+  </nav>
+
+  <!-- 進捗状況セクション -->
+  <div class="section" id="progress">
+    <h2>📊 進捗状況</h2>
+    <div class="progress-section">
+      <p><strong>全体進捗：</strong><span id="progress-text">0/32 完了 (0%)</span></p>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width: 0%">0%</div>
+      </div>
+      <button class="reset-button" onclick="resetAllProgress()">全てリセット</button>
+    </div>
+  </div>
+
+  <!-- ツアー内容セクション -->
+  <!-- 参加メンバー -->
+  <div class="section" id="members">
+    <h2>👥 参加メンバー</h2>
+    <div class="members">
+      <strong id="members-list"></strong><br>
+      <span style="font-size: 1.2em; color: #2e7d32"><strong id="members-count"></strong></span>
+    </div>
+  </div>
+
+  <!-- 旅の目的 -->
+  <div class="section" id="purpose">
+    <h2>🎯 今回の旅の目的</h2>
+    <div class="purpose">
+      <ul id="purpose-list"></ul>
+    </div>
+  </div>
+
+  <!-- 注意事項 -->
+  <div class="section" id="attention">
+    <h2>⚠️ 注意事項</h2>
+    <div class="warning">
+      <ul id="warnings-list"></ul>
+    </div>
+  </div>
+
+  <!-- 係り分担 -->
+  <div class="section" id="roles">
+    <h2>👨‍💼 係分担</h2>
+    <p><strong>各係の言うことは必ずきく。不満があるときは班長に訴える</strong></p>
+    <div class="role-grid" id="roles-grid"></div>
+  </div>
+
+  <!-- 持ち物セクション -->
+  <div class="section" id="items">
+    <h2>🎒 持ち物</h2>
+    <div class="items">
+      <ul id="items-list"></ul>
+    </div>
+  </div>
+
+  <!-- 反省会 -->
+  <div class="note" id="after" style="text-align: center; font-weight: 600;">
+    🍝 12/13（仮）【反省会】18時 新狭山 レストラン ルコッソ イタリアン 🍝
+  </div>
+
+  <!-- フッター -->
+  <div style="text-align: center; margin-top: 30px; padding: 20px; background: linear-gradient(45deg, #81c784, #66bb6a); color: white; border-radius: 10px;">
+    <h3 style="margin: 0; color: white">🌺 素敵な旅になりますように 🌺</h3>
+    <p style="margin: 10px 0 0 0; font-size: 1.1em">みんなでたくさんの思い出を作りましょう！</p>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="data.js"></script>
+  <script src="main.js"></script>
+  <script>
+    // コンテンツを動的に生成
+    function renderContent() {
+      // 参加メンバー
+      document.getElementById('members-list').textContent = tourContent.members.list;
+      document.getElementById('members-count').textContent = tourContent.members.count;
+
+      // 旅の目的
+      const purposeList = document.getElementById('purpose-list');
+      tourContent.purpose.items.forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = item;
+        purposeList.appendChild(li);
+      });
+
+      // 注意事項
+      const warningsList = document.getElementById('warnings-list');
+      tourContent.warnings.items.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        warningsList.appendChild(li);
+      });
+
+      // 係り分担
+      const rolesGrid = document.getElementById('roles-grid');
+      tourContent.roles.items.forEach(role => {
+        const card = document.createElement('div');
+        card.className = 'role-card';
+        card.innerHTML = `
+          <div class="role-title">${role.title}</div>
+          ${role.note ? `<small>${role.note}</small><br>` : ''}
+          ${role.description}
+        `;
+        rolesGrid.appendChild(card);
+      });
+
+      // 持ち物
+      const itemsList = document.getElementById('items-list');
+      tourContent.items.items.forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = item;
+        itemsList.appendChild(li);
+      });
+
+      // 進捗状況を更新（すべての画面のデータを読み込む）
+      updateProgressFromAllScreens();
+    }
+
+    // すべての画面の進捗データを読み込んで進捗を計算
+    function updateProgressFromAllScreens() {
+      const totalItems = getTotalItems();
+      let completedCount = 0;
+
+      scheduleData.schedule.forEach(day => {
+        day.items.forEach(item => {
+          const saved = localStorage.getItem(item.id);
+          if (saved === 'true') {
+            completedCount++;
+          }
+        });
+      });
+
+      const percentage = Math.round((completedCount / totalItems) * 100);
+      
+      const progressText = document.getElementById('progress-text');
+      const progressFill = document.getElementById('progress-fill');
+      
+      if (progressText) {
+        progressText.textContent = `${completedCount}/${totalItems} 完了 (${percentage}%)`;
+      }
+      
+      if (progressFill) {
+        progressFill.style.width = `${percentage}%`;
+        progressFill.textContent = `${percentage}%`;
+      }
+    }
+
+    // ページ読み込み時に実行
+    document.addEventListener('DOMContentLoaded', renderContent);
+  </script>
+</body>
+</html>

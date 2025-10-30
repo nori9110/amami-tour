@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>奄美大島満喫ツアー - 詳細日程</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <!-- ヘッダー -->
+  <div class="header">
+    <h1>🏝️ 奄美大島満喫ツアー 🐢</h1>
+    <div class="subtitle">～ 旅の栞（進捗チェック版）～</div>
+    <div class="header-actions">
+      <a href="index.html" class="toggle-button" style="text-decoration: none;">← トップへ</a>
+      <button class="toggle-button" id="theme-toggle" onclick="toggleTheme()">🌗 テーマ切替</button>
+      <button class="toggle-button" id="print-btn">🖨️ 印刷</button>
+    </div>
+  </div>
+
+  <!-- ナビゲーションメニュー -->
+  <nav class="topnav">
+    <a href="index.html">🏠 トップ</a>
+    <a href="schedule.html">📅 詳細日程</a>
+    <a href="map.html">🗺️ 地図</a>
+  </nav>
+
+  <!-- ツアー日程セクション -->
+  <div class="section" id="schedule">
+    <h2>📅 詳細日程（チェックリスト）</h2>
+    <div id="schedule-days"></div>
+  </div>
+
+  <!-- トップへボタン -->
+  <button class="to-top" id="to-top">⬆️ トップへ</button>
+
+  <!-- JavaScript -->
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script>
+    // コンテンツを動的に生成
+    function renderSchedule() {
+      const scheduleDays = document.getElementById('schedule-days');
+      
+      // 保存された進捗を復元
+      scheduleData.schedule.forEach(day => {
+        day.items.forEach(item => {
+          const saved = localStorage.getItem(item.id);
+          if (saved === 'true') {
+            item.checked = true;
+          }
+        });
+      });
+
+      scheduleData.schedule.forEach(day => {
+        const dayDiv = document.createElement('div Drawings');
+        dayDiv.className = 'schedule-day';
+        dayDiv.innerHTML = `<h3>📆 ${day.dateLabel}</h3>`;
+        
+        const itemsContainer = document.createElement('div');
+        day.items.forEach(item => {
+          const itemDiv = document.createElement('div');
+          itemDiv.className = 'checkbox-item';
+          if (item.checked) {
+            itemDiv.classList.add('completed');
+          }
+          
+          let linksHtml = '';
+          if (item.website) {
+            const linkText = item.location ? item.location.name : 'ウェブサイト';
+            linksHtml += `<a href="${item.website}" target="_blank" rel="noopener noreferrer">🔗 ${linkText} <span class="external-link-icon">↗</span></a>`;
+          }
+          if (item.location) {
+            linksHtml += ` <a href="map.html?location=${item.id}" style="margin-left: 8px;">📍 地図で表示</a>`;
+          }
+          
+          itemDiv.innerHTML = `
+            <input type="checkbox" id="${item.id}" onchange="updateProgress()" ${item.checked ? 'checked' : ''}>
+            <div class="time">${item.time}</div>
+            <div class="activity">
+              <div class="activity-text">${item.activity}</div>
+              ${item.note ? `<small>${item.note}</small>` : ''}
+              ${linksHtml ? `<div class="activity-links">${linksHtml}</div>` : ''}
+            </div>
+          `;
+          itemsContainer.appendChild(itemDiv);
+        });
+        dayDiv.appendChild(itemsContainer);
+        scheduleDays.appendChild(dayDiv);
+      });
+    }
+
+    // ページ読み込み時に実行
+    document.addEventListener('DOMContentLoaded', renderSchedule);
+  </script>
+</body>
+</html>

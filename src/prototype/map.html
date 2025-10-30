@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>奄美大島満喫ツアー - 地図</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- ヘッダー -->
+  <div class="header">
+    <h1>🏝️ 奄美大島満喫ツアー 🐢</h1>
+    <div class="subtitle">～ 旅の栞（進捗チェック版）～</div>
+    <div class="header-actions">
+      <a href="index.html" class="toggle-button">← トップへ</a>
+      <button class="toggle-button" id="theme-toggle" onclick="toggleTheme()">🌗 テーマ切替</button>
+      <button class="toggle-button" id="print-btn">🖨️ 印刷</button>
+    </div>
+  </div>
+
+  <!-- ナビゲーションメニュー -->
+  <nav class="topnav">
+    <a href="index.html">🏠 トップ</a>
+    <a href="schedule.html">📅 詳細日程</a>
+    <a href="map.html">🗺️ 地図</a>
+  </nav>
+
+  <!-- GoogleMapセクション -->
+  <div class="section map-section" id="map-section">
+    <h2>🗺️ 奄美大島の地図（FromTo）</h2>
+    
+    <!-- 経路検索パネル -->
+    <div class="route-panel">
+      <label for="route-from">From（出発地点）:</label>
+      <select id="route-from">
+        <option value="">選択してください</option>
+      </select>
+      
+      <label for="route-to">To（到着地点）:</label>
+      <select id="route-to">
+        <option value="">選択してください</option>
+      </select>
+      
+      <div class="transport-mode">
+        <label><input type="radio" name="transport-mode" value="DRIVING" checked> 🚗 車</label>
+      <label><input type="radio" name="transport-mode" value="WALKING"> 🚶 徒歩</label>
+        <label><input type="radio" name="transport-mode" value="TRANSIT"> 🚌 公共交通機関</label>
+      </div>
+      
+      <button id="route-search">経路検索</button>
+      <button id="route-clear" class="secondary">クリア</button>
+    </div>
+    
+    <!-- 地図表示領域 -->
+    <div id="map"></div>
+    
+    <!-- 経路情報パネル -->
+    <div id="route-info" class="route-info"></div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="data.js"></script>
+  <script>
+    // URLパラメータから地点情報を取得
+    function getLocationFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('location');
+    }
+
+    // 地点を地図上に表示する関数（map.jsから呼び出される）
+    function showLocation(itemId) {
+      const item = findItemById(itemId);
+      if (item && item.location && window.map) {
+        window.map.setCenter({ lat: item.location.lat, lng: item.location.lng});
+        window.map.setZoom(15);
+      }
+    }
+
+    // IDでアイテムを検索
+    function findItemById(id) {
+      for (const day of scheduleData.schedule) {
+        const item = day.items.find(item => item.id === id);
+        if (item) return item;
+      }
+      return null;
+    }
+  </script>
+  
+  <!-- Google Maps API -->
+  <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap&libraries=places">
+  </script>
+  <script src="map.js"></script>
+  <script>
+    // 地図初期化後にURLパラメータの地点を表示
+    const originalInitMap = window.initMap;
+    window.initMap = function() {
+      if (originalInitMap) originalInitMap();
+      
+      // URLパラメータから地点を取得して表示
+      const locationId = getLocationFromURL();
+      if (locationId) {
+        setTimeout(() => showLocation(locationId), 500);
+      }
+    };
+  </script>
+</body>
+</html>
