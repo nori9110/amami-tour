@@ -53,7 +53,7 @@ temp/
 
 # Python
 __pycache__/
-*.py[cod Swimming]
+*.py[cod]
 *$py.class
 *.so
 .Python
