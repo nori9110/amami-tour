@@ -721,3 +721,54 @@ li {
 }
 
 /* --- 地図画面のUI配置 改善 ここまで --- */
+
+/* --- 交通手段レイアウト 強制上書き（競合/キャッシュ対策） --- */
+.transport-mode { align-items: center !important; }
+.transport-mode .transport-label { 
+  display: inline-flex !important; 
+  flex-direction: row !important; 
+  align-items: center !important; 
+  white-space: nowrap !important; 
+  writing-mode: horizontal-tb !important; 
+  text-orientation: mixed !important; 
+  word-break: keep-all !important; 
+}
+.transport-mode .transport-icon { display: inline-block !important; }
+.transport-mode .transport-text { display: inline-block !important; }
+/* --- /交通手段レイアウト 強制上書き --- */
+
+/* === Safari & WebKit必須: 交通手段ラジオを横並び・縦崩れ防止・欧文書式で強制 === */
+.transport-label {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  white-space: nowrap !important;
+  writing-mode: horizontal-tb !important;
+  -webkit-writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+  font-size: 1em;
+  font-weight: 600;
+  font-family: Arial, 'Noto Sans JP', sans-serif !important;
+  letter-spacing: 0.03em;
+  font-feature-settings: 'palt' 0, 'pkna' 0, 'vpal' 0;
+  word-break: keep-all !important;
+}
+
+.transport-icon {
+  font-size: 1.26em;
+  margin: 0 5px 0 0;
+  line-height: 1;
+}
+
+.transport-text {
+  display: inline-block !important;
+  font-family: Arial, 'Noto Sans JP', sans-serif !important;
+  font-size: 1em;
+  font-feature-settings: 'palt' 0, 'pkna' 0, 'vpal' 0;
+  letter-spacing: 0.01em;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  writing-mode: horizontal-tb !important;
+  -webkit-writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+}
