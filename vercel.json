@@ -2,7 +2,8 @@
   "rewrites": [
     { "source": "/", "destination": "/src/app/index.html" },
     { "source": "/schedule", "destination": "/src/app/schedule.html" },
-    { "source": "/map", "destination": "/src/app/map.html" }
+    { "source": "/map", "destination": "/src/app/map.html" },
+    { "source": "/split", "destination": "/src/app/split.html" }
   ],
   "headers": [
     {

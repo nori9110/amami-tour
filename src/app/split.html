@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>割り勘・立替精算</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div class="header">
+    <h1>💴 割り勘・立替精算</h1>
+    <div class="header-actions">
+      <a class="toggle-button" href="index.html">🏠 トップへ</a>
+      <button class="toggle-button" id="save-data">💾 保存</button>
+      <button class="toggle-button" id="export-csv">⬇️ CSV</button>
+    </div>
+  </div>
+
+  <nav class="topnav">
+    <a href="index.html">🏠 トップ</a>
+    <a href="schedule.html">📅 詳細日程</a>
+    <a href="map.html">🗺️ 地図</a>
+    <a href="split.html" class="active">💴 割り勘・立替</a>
+  </nav>
+
+  <div class="section">
+    <h2>👥 家族設定（固定）</h2>
+    <div id="families" class="role-grid">
+      <!-- JSで描画（岡部/小野/今井/伊藤 各2名・子ども無し） -->
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🧾 項目一覧（チェックで集計）</h2>
+    <div style="margin-bottom: 10px">
+      <small>丸め: 1円単位（四捨五入なし。端数はそのまま）</small>
+    </div>
+    <div id="expense-list" class="items"></div>
+    <button class="reset-button" id="add-item">＋ 項目追加</button>
+  </div>
+
+  <div class="section">
+    <h2>🧮 小計・一人当たり</h2>
+    <div id="totals" class="items"></div>
+  </div>
+
+  <div class="section">
+    <h2>🔁 清算結果（誰が誰にいくら）</h2>
+    <div id="settlements" class="items"></div>
+  </div>
+
+  <button class="to-top" id="to-top">⬆️ トップへ</button>
+
+  <script src="assets/js/split.js"></script>
+</body>
+</html>
+
+
