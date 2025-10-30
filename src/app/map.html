@@ -61,47 +61,55 @@
 
   <!-- JavaScript -->
   <script src="assets/js/data.js"></script>
-  <script>
-    // URLパラメータから地点情報を取得
-    function getLocationFromURL() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('location');
-    }
-
-    // 地点を地図上に表示する関数（map.jsから呼び出される）
-    function showLocation(itemId) {
-      const item = findItemById(itemId);
-      if (item && item.location && window.map) {
-        window.map.setCenter({ lat: item.location.lat, lng: item.location.lng});
-        window.map.setZoom(15);
-      }
-    }
-
-    // IDでアイテムを検索
-    function findItemById(id) {
-      for (const day of scheduleData.schedule) {
-        const item = day.items.find(item => item.id === id);
-        if (item) return item;
-      }
-      return null;
-    }
-  </script>
+  <script src="assets/js/map.js"></script>
   
   <!-- Google Maps API -->
+  <!-- TODO: フェーズ4で環境変数に置き換え -->
   <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFBYpIRskBip5EGQTlrpMCqDpWtE2oZp8&callback=initMap&libraries=places">
+    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap&libraries=places">
   </script>
-  <script src="assets/js/map.js"></script>
   <script>
+    // URLパラメータから地点情報を取得して地図上に表示
+    function handleLocationFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      const locationId = params.get('location');
+      
+      if (locationId && window.findItemById) {
+        const item = window.findItemById(locationId);
+        if (item && item.location && window.map) {
+          window.map.setCenter({ 
+            lat: item.location.lat, 
+            lng: item.location.lng
+          });
+          window.map.setZoom(15);
+          
+          // 該当マーカーをハイライト（オプション）
+          if (window.markers && window.markers.length > 0) {
+            const marker = window.markers.find(m => 
+              m.position.lat() === item.location.lat && 
+              m.position.lng() === item.location.lng
+            );
+            if (marker) {
+              // マーカーの情報ウィンドウを開く
+              google.maps.event.trigger(marker, 'click');
+            }
+          }
+        }
+      }
+    }
+
     // 地図初期化後にURLパラメータの地点を表示
     const originalInitMap = window.initMap;
     window.initMap = function() {
       if (originalInitMap) originalInitMap();
       
-      // URLパラメータから地点を取得して表示
-      const locationId = getLocationFromURL();
-      if (locationId) {
-        setTimeout(() => showLocation(locationId), 500);
+      // 地図が完全に読み込まれた後にURLパラメータを処理
+      if (window.map) {
+        window.map.addListener('tilesloaded', () => {
+          handleLocationFromURL();
+        });
+        // すぐに実行する場合（地図が既に読み込まれている場合）
+        setTimeout(handleLocationFromURL, 500);
       }
     };
   </script>

@@ -439,10 +439,39 @@ body {
   border-radius: 8px;
   margin: 12px 0;
   display: none;
+  border-left: 4px solid #4caf50;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] .route-info {
+  background: #0b2b17;
+  border-left-color: #22c55e;
 }
 
 .route-info.show {
   display: block;
+}
+
+.route-info a {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 4px 8px;
+  background: #fff;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.route-info a:hover {
+  background: #f0f0f0;
+}
+
+[data-theme='dark'] .route-info a {
+  background: #1f2937;
+  color: #60a5fa;
+}
+
+[data-theme='dark'] .route-info a:hover {
+  background: #374151;
 }
 
 /* トップへボタン */

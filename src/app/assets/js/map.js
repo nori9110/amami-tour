@@ -217,7 +217,9 @@ function calculateAndDisplayRoute(fromLocation, toLocation) {
         displayRouteInfo(
           leg.distance.text,
           leg.duration.text,
-          mode
+          mode,
+          fromLocation,
+          toLocation
         );
       } else {
         alert('経路が見つかりませんでした。');
@@ -227,7 +229,7 @@ function calculateAndDisplayRoute(fromLocation, toLocation) {
 }
 
 // 経路情報を表示
-function displayRouteInfo(distance, duration, mode) {
+function displayRouteInfo(distance, duration, mode, fromLocation, toLocation) {
   const routeInfo = document.getElementById('route-info');
   if (!routeInfo) return;
 
@@ -237,13 +239,33 @@ function displayRouteInfo(distance, duration, mode) {
     'TRANSIT': '公共交通機関'
   };
 
+  // Google Mapsアプリへのリンクを生成
+  const fromLat = fromLocation.lat;
+  const fromLng = fromLocation.lng;
+  const toLat = toLocation.lat;
+  const toLng = toLocation.lng;
+  const travelMode = mode.toLowerCase();
+  
+  const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${fromLat},${fromLng}&destination=${toLat},${toLng}&travelmode=${travelMode}`;
+
   routeInfo.innerHTML = `
-    <strong>経路情報</strong><br>
-    距離: ${distance}<br>
-    所要時間: ${duration}（${modeText[mode] || mode}）<br>
-    <a href="https://www.google.com/maps/dir/?api=1&travelmode=${mode.toLowerCase()}" target="_blank">Google Mapsで開く ↗</a>
+    <div style="padding: 8px;">
+      <strong>📍 経路情報</strong><br>
+      <div style="margin-top: 8px;">
+        <strong>距離:</strong> ${distance}<br>
+        <strong>所要時間:</strong> ${duration}（${modeText[mode] || mode}）
+      </div>
+      <div style="margin-top: 8px;">
+        <a href="${googleMapsUrl}" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none;">
+          🗺️ Google Mapsアプリで開く <span style="font-size: 0.9em;">↗</span>
+        </a>
+      </div>
+    </div>
   `;
   routeInfo.classList.add('show');
+  
+  // 経路情報パネルにスクロール（モバイル対応）
+  routeInfo.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 // 地図で特定の地点を表示（日程項目から呼び出し）
@@ -264,3 +286,4 @@ function showLocationOnMap(itemId) {
 // グローバルに公開
 window.showLocationOnMap = showLocationOnMap;
 window.findItemById = findItemById;
+window.markers = markers;
