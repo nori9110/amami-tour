@@ -439,10 +439,39 @@ body {
   border-radius: 8px;
   margin: 12px 0;
   display: none;
+  border-left: 4px solid #4caf50;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] .route-info {
+  background: #0b2b17;
+  border-left-color: #22c55e;
 }
 
 .route-info.show {
   display: block;
+}
+
+.route-info a {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 4px 8px;
+  background: #fff;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.route-info a:hover {
+  background: #f0f0f0;
+}
+
+[data-theme='dark'] .route-info a {
+  background: #1f2937;
+  color: #60a5fa;
+}
+
+[data-theme='dark'] .route-info a:hover {
+  background: #374151;
 }
 
 /* トップへボタン */
@@ -593,3 +622,105 @@ ul {
 li {
   margin: 4px 0;
 }
+
+/* --- 地図画面のUI配置 改善 ここから --- */
+.route-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.route-panel label {
+  align-self: flex-start;
+  margin: 8px 0 4px 4px;
+  font-weight: 600;
+  font-size: 1em;
+}
+
+.route-panel select,
+.route-panel input[type="text"] {
+  width: 260px;
+  margin-bottom: 10px;
+}
+
+.transport-mode {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin: 18px 0 12px 0;
+}
+
+.transport-mode label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1em;
+  gap: 2px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.transport-mode input[type="radio"] {
+  margin-bottom: 4px;
+  accent-color: #26c6da;
+  transform: scale(1.15);
+}
+
+.transport-label {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1em;
+  gap: 7px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-right: 8px;
+}
+.transport-icon {
+  font-size: 1.28em;
+  margin-left: 2px;
+  margin-right: 2px;
+  line-height: 1;
+  display: inline-block;
+}
+.transport-text {
+  font-size: 1em;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  display: inline-block;
+}
+
+/* スマホ向けにも行間が詰まらないように調整 */
+@media (max-width: 600px) {
+  .transport-label { gap: 4px; margin-right: 3px; font-size: 0.98em; }
+  .transport-icon { font-size: 1.05em; }
+}
+
+/* ボタン類を中央揃え・間隔拡大 */
+.route-panel-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  margin-top: 12px;
+  margin-bottom: 4px;
+}
+/* 既存のボタンをこのクラスでラップする推奨。HTML編集困難ならbutton同士が横並び中央なのでそのままでも現状OK */
+
+/* 小画面時の余白調整 */
+@media (max-width: 600px) {
+  .route-panel input,
+  .route-panel select {
+    width: 98%;
+    min-width: 100px;
+  }
+  .route-panel {
+    padding: 8px 2px;
+  }
+  .transport-mode {
+    gap: 12px;
+    margin: 10px 0 8px 0;
+    flex-wrap: wrap;
+  }
+}
+
+/* --- 地図画面のUI配置 改善 ここまで --- */

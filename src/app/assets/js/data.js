@@ -70,7 +70,7 @@ const scheduleData = {
             lng: 129.4957,
             address: "鹿児島県大島郡瀬戸内町"
           },
-          website: "https://example.com/kaikoubou",
+          website: "https://kyoraumi.com/",
           type: "restaurant"
         },
         {
@@ -83,7 +83,7 @@ const scheduleData = {
             lat: 28.3633,
             lng: 129.4817
           },
-          website: "https://example.com/native-city",
+          website: "https://amami-diving.com/",
           type: "activity"
         },
         {
@@ -96,6 +96,7 @@ const scheduleData = {
             lat: 28.3583,
             lng: 129.4750
           },
+          website: "https://www.arukikata.co.jp/tokuhain/261380/",
           type: "sightseeing"
         },
         {
@@ -108,7 +109,7 @@ const scheduleData = {
             lat: 28.3633,
             lng: 129.4850
           },
-          website: "https://example.com/onshare",
+          website: "https://www.amamionshore.com/shimauta-sunset",
           type: "activity"
         },
         {
@@ -122,13 +123,13 @@ const scheduleData = {
             lng: 129.4883,
             address: "鹿児島県大島郡龍郷町芦徳419-1"
           },
-          website: "https://example.com/hotel-caletta",
+          website: "https://www.hotel-caretta.com/",
           type: "hotel"
         },
         {
           id: "item-12",
           time: "19:30",
-          activity: "チェックイン",
+          activity: "ホテルカレッタ チェックイン",
           note: "0997-62-3821",
           checked: false
         },
@@ -137,6 +138,7 @@ const scheduleData = {
           time: "18:00",
           activity: "外食 近くの鳥料理店？",
           checked: false,
+          website: "https://www.google.com/search?q=%E5%A5%84%E7%BE%8E%E5%A4%A7%E5%B3%B6+%E3%82%AB%E3%83%AC%E3%83%83%E3%82%BF%E8%BF%91%E9%9A%A3%E3%81%AE%E9%A3%9F%E4%BA%8B%E5%87%A6&rlz=1C5CHFA_enJP1034JP1036&oq=%E5%A5%84%E7%BE%8E%E5%A4%A7%E5%B3%B6%E3%80%80%E3%82%AB%E3%83%AC%E3%83%83%E3%82%BF%E8%BF%91%E9%9A%A3%E3%81%AE%E9%A3%9F%E4%BA%8B%E5%87%A6&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIHCAEQABjvBTIKCAIQABiABBiiBDIKCAMQABiiBBiJBTIKCAQQABiABBiiBNIBCTEzNTgyajBqNKgCALACAA&sourceid=chrome&ie=UTF-8",
           type: "restaurant"
         }
       ]
@@ -155,7 +157,7 @@ const scheduleData = {
         {
           id: "item-15",
           time: "8:00",
-          activity: "ホテル出発<br>観光 名瀬方面ドライブ",
+          activity: "ホテルカレッタ出発<br>観光 名瀬方面ドライブ",
           checked: false
         },
         {
@@ -168,7 +170,7 @@ const scheduleData = {
             lat: 28.3967,
             lng: 129.5233
           },
-          website: "https://example.com/kinsakubaru",
+          website: "https://www.google.com/search?q=%E5%A5%84%E7%BE%8E%E5%A4%A7%E5%B3%B6+%E9%87%91%E4%BD%9C%E5%8E%9F%E5%8E%9F%E7%94%9F%E6%9E%97%E3%83%84%E3%82%A2%E3%83%BC&rlz=1C5CHFA_enJP1034JP1036&oq=%E5%A5%84%E7%BE%8E%E5%A4%A7%E5%B3%B6%E3%80%80%E9%87%91%E4%BD%9C%E5%8E%9F%E5%8E%9F%E7%94%9F%E6%9E%97%E3%83%84%E3%82%A2%E3%83%BC&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIKCAEQABiABBiiBDIHCAIQABjvBTIKCAMQABiABBiiBDIHCAQQABjvBTIKCAUQABiABBiiBNIBCDUxOTNqMGo5qAIAsAIA&sourceid=chrome&ie=UTF-8",
           type: "sightseeing"
         },
         {
@@ -181,7 +183,7 @@ const scheduleData = {
             lat: 28.3989,
             lng: 129.4950
           },
-          website: "https://example.com/hisakura",
+          website: "https://hisakura.synapse-site.jp/",
           type: "restaurant"
         },
         {
@@ -194,19 +196,21 @@ const scheduleData = {
             lat: 28.4050,
             lng: 129.4883
           },
+          website: "https://www.ohama.marutani-amami.com/ocean-exhibition-hall",
           type: "sightseeing"
         },
         {
           id: "item-19",
           time: "15:00",
           activity: "ホテルウエストコート本館チェックイン",
-          note: "0977-52-8080",
+          note: "0997-52-8080",
           checked: false,
           location: {
             name: "ホテルウエストコート本館",
             lat: 28.4183,
             lng: 129.4967
           },
+          website: "https://www.westcourt.co.jp/",
           type: "hotel"
         },
         {
@@ -219,6 +223,7 @@ const scheduleData = {
             lat: 28.4217,
             lng: 129.5033
           },
+          website: "https://www.mangrovepark.com/",
           type: "sightseeing"
         },
         {
@@ -226,7 +231,7 @@ const scheduleData = {
           time: "16:00",
           activity: "サンセットマングローブツアーと黒兎探検ツアー",
           checked: false,
-          website: "https://example.com/mangrove-tour",
+          website: "https://amami-tour.com/scene-time/night-tour.html",
           type: "activity"
         },
         {
@@ -271,6 +276,7 @@ const scheduleData = {
             lat: 28.3764,
             lng: 129.4957
           },
+          website: "https://kyoraumi.com/",
           type: "restaurant"
         },
         {

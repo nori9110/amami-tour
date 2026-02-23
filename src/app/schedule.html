@@ -54,7 +54,7 @@
       });
 
       scheduleData.schedule.forEach(day => {
-        const dayDiv = document.createElement('div Drawings');
+        const dayDiv = document.createElement('div');
         dayDiv.className = 'schedule-day';
         dayDiv.innerHTML = `<h3>📆 ${day.dateLabel}</h3>`;
         
@@ -70,6 +70,10 @@
           if (item.website) {
             const linkText = item.location ? item.location.name : 'ウェブサイト';
             linksHtml += `<a href="${item.website}" target="_blank" rel="noopener noreferrer">🔗 ${linkText} <span class="external-link-icon">↗</span></a>`;
+          } else {
+            const q = encodeURIComponent((item.location && item.location.name) ? item.location.name : item.activity);
+            const searchUrl = `https://www.google.com/search?q=${q}`;
+            linksHtml += `<a href="${searchUrl}" target="_blank" rel="noopener noreferrer">🔎 検索（${(item.location && item.location.name) ? item.location.name : '施設名'}） <span class="external-link-icon">↗</span></a>`;
           }
           if (item.location) {
             linksHtml += ` <a href="map.html?location=${item.id}" style="margin-left: 8px;">📍 地図で表示</a>`;

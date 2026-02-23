@@ -1,0 +1,17 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/src/app/index.html" },
+    { "source": "/schedule", "destination": "/src/app/schedule.html" },
+    { "source": "/map", "destination": "/src/app/map.html" },
+    { "source": "/split", "destination": "/src/app/split.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    }
+  ]
+}
+

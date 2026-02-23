@@ -102,6 +102,13 @@ function createInfoWindowContent(item) {
     content += `<a href="${item.website}" target="_blank" rel="noopener noreferrer">`;
     content += `🔗 ウェブサイト <span class="external-link-icon">↗</span></a>`;
     content += `</div>`;
+  } else {
+    const query = encodeURIComponent((item.location && item.location.name) ? item.location.name : item.activity);
+    const searchUrl = `https://www.google.com/search?q=${query}`;
+    content += `<div style="margin-top: 4px;">`;
+    content += `<a href="${searchUrl}" target="_blank" rel="noopener noreferrer">`;
+    content += `🔎 検索 <span class="external-link-icon">↗</span></a>`;
+    content += `</div>`;
   }
   
   content += `</div>`;
@@ -118,6 +125,9 @@ function initRouteSearch() {
 
   // ドロップダウンに日程項目を追加
   if (fromSelect && toSelect) {
+    // 現在地オプションを追加
+    fromSelect.add(new Option('現在地（端末の位置）', '__CURRENT__'));
+
     scheduleData.schedule.forEach(day => {
       day.items.forEach(item => {
         if (item.location && item.location.name) {
@@ -140,11 +150,31 @@ function initRouteSearch() {
         return;
       }
 
-      const fromItem = findItemById(fromId);
       const toItem = findItemById(toId);
 
-      if (fromItem && toItem && fromItem.location && toItem.location) {
+      // Toのバリデーション
+      if (!toItem || !toItem.location) {
+        alert('到着地点が不正です。');
+        return;
+      }
+
+      // Fromが現在地の場合
+      if (fromId === '__CURRENT__') {
+        getUserLocation().then(currentLoc => {
+          calculateAndDisplayRoute(currentLoc, toItem.location);
+        }).catch(err => {
+          alert('現在地を取得できませんでした。ブラウザの位置情報設定を確認してください。');
+          console.error('Geolocation error:', err);
+        });
+        return;
+      }
+
+      // 通常のFrom（スケジュール項目）
+      const fromItem = findItemById(fromId);
+      if (fromItem && fromItem.location) {
         calculateAndDisplayRoute(fromItem.location, toItem.location);
+      } else {
+        alert('出発地点が不正です。');
       }
     });
   }
@@ -165,7 +195,15 @@ function initRouteSearch() {
   // From/To選択時の地図移動
   if (fromSelect) {
     fromSelect.addEventListener('change', () => {
-      const item = findItemById(fromSelect.value);
+      const val = fromSelect.value;
+      if (val === '__CURRENT__') {
+        getUserLocation().then(loc => {
+          map.setCenter({ lat: loc.lat, lng: loc.lng });
+          map.setZoom(15);
+        }).catch(() => {});
+        return;
+      }
+      const item = findItemById(val);
       if (item && item.location) {
         map.setCenter({ lat: item.location.lat, lng: item.location.lng });
         map.setZoom(15);
@@ -217,7 +255,9 @@ function calculateAndDisplayRoute(fromLocation, toLocation) {
         displayRouteInfo(
           leg.distance.text,
           leg.duration.text,
-          mode
+          mode,
+          fromLocation,
+          toLocation
         );
       } else {
         alert('経路が見つかりませんでした。');
@@ -226,8 +266,28 @@ function calculateAndDisplayRoute(fromLocation, toLocation) {
   );
 }
 
+// 現在地をPromiseで取得
+function getUserLocation() {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject(new Error('Geolocation not supported'));
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        resolve({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        });
+      },
+      error => reject(error),
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  });
+}
+
 // 経路情報を表示
-function displayRouteInfo(distance, duration, mode) {
+function displayRouteInfo(distance, duration, mode, fromLocation, toLocation) {
   const routeInfo = document.getElementById('route-info');
   if (!routeInfo) return;
 
@@ -237,13 +297,33 @@ function displayRouteInfo(distance, duration, mode) {
     'TRANSIT': '公共交通機関'
   };
 
+  // Google Mapsアプリへのリンクを生成
+  const fromLat = fromLocation.lat;
+  const fromLng = fromLocation.lng;
+  const toLat = toLocation.lat;
+  const toLng = toLocation.lng;
+  const travelMode = mode.toLowerCase();
+  
+  const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${fromLat},${fromLng}&destination=${toLat},${toLng}&travelmode=${travelMode}`;
+
   routeInfo.innerHTML = `
-    <strong>経路情報</strong><br>
-    距離: ${distance}<br>
-    所要時間: ${duration}（${modeText[mode] || mode}）<br>
-    <a href="https://www.google.com/maps/dir/?api=1&travelmode=${mode.toLowerCase()}" target="_blank">Google Mapsで開く ↗</a>
+    <div style="padding: 8px;">
+      <strong>📍 経路情報</strong><br>
+      <div style="margin-top: 8px;">
+        <strong>距離:</strong> ${distance}<br>
+        <strong>所要時間:</strong> ${duration}（${modeText[mode] || mode}）
+      </div>
+      <div style="margin-top: 8px;">
+        <a href="${googleMapsUrl}" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: none;">
+          🗺️ Google Mapsアプリで開く <span style="font-size: 0.9em;">↗</span>
+        </a>
+      </div>
+    </div>
   `;
   routeInfo.classList.add('show');
+  
+  // 経路情報パネルにスクロール（モバイル対応）
+  routeInfo.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 // 地図で特定の地点を表示（日程項目から呼び出し）
@@ -264,3 +344,4 @@ function showLocationOnMap(itemId) {
 // グローバルに公開
 window.showLocationOnMap = showLocationOnMap;
 window.findItemById = findItemById;
+window.markers = markers;
